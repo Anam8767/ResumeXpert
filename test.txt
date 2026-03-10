@@ -1,0 +1,3 @@
+John Doe
+Software Developer with 2 years experience in React, Node.js, and AWS.
+Skills: JavaScript, React, Node.js, Python, AWS, Docker.

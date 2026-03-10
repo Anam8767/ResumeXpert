@@ -1,0 +1,58 @@
+.app-layout {
+  min-height: 100vh;
+  background: #f5f7fb;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1;
+  padding: 32px;
+  margin-top: 70px; // header height
+  background-color: #f9fafb; // light neutral bg
+
+}
+.app-content .ai-markdown {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #111827;
+}
+
+/* HEADINGS (Resume Summary, Skills etc.) */
+.app-content .ai-markdown h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2563eb;          // blue heading
+  margin-top: 24px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  border-left: 4px solid #2563eb;
+}
+
+/* SUB HEADINGS (Role Name etc.) */
+.app-content .ai-markdown h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+
+/* PARAGRAPH spacing */
+.app-content .ai-markdown p {
+  margin-bottom: 10px;
+}
+
+/* BULLET LIST */
+.app-content .ai-markdown ul {
+  padding-left: 22px;
+  margin-bottom: 12px;
+}
+
+.app-content .ai-markdown li {
+  margin-bottom: 6px;
+}
+
+/* Blue bullets (premium feel) */
+.app-content .ai-markdown li::marker {
+  color: #2563eb;
+}

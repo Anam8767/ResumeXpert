@@ -1,0 +1,16 @@
+{
+  "file_name": "test_resume.txt",
+  "skills_found": [
+    "Node.Js",
+    "Python",
+    "Javascript",
+    "React"
+  ],
+  "experience": "3 years of experience",
+  "total_skills": 4,
+  "content_info": {
+    "has_projects": false,
+    "has_education": false,
+    "length": 92
+  }
+}

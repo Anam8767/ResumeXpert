@@ -1,0 +1,857 @@
+# ResumeXpert - All Changes Made During Session
+
+## 🆕 NEW FILES CREATED
+
+### 1. services/resume_analyzer.py (NEW FILE)
+```python
+import re
+import json
+from datetime import datetime
+
+class DynamicResumeAnalyzer:
+    """Truly dynamic resume analyzer - NO TEMPLATES"""
+    
+    @staticmethod
+    def analyze_resume_completely(text: str, filename: str) -> dict:
+        """Complete dynamic analysis"""
+        
+        # Extract EVERYTHING dynamically
+        analysis = {
+            'filename': filename,
+            'timestamp': datetime.now().isoformat(),
+            'skills': DynamicResumeAnalyzer.extract_skills_unique(text),
+            'experience': DynamicResumeAnalyzer.extract_experience_info(text),
+            'education': DynamicResumeAnalyzer.extract_education_info(text),
+            'projects': DynamicResumeAnalyzer.extract_projects_info(text),
+            'strengths': DynamicResumeAnalyzer.identify_strengths(text),
+            'weaknesses': DynamicResumeAnalyzer.identify_weaknesses(text),
+            'suggestions': DynamicResumeAnalyzer.generate_suggestions(text),
+            'unique_factors': DynamicResumeAnalyzer.find_unique_factors(text),
+            'score': DynamicResumeAnalyzer.calculate_dynamic_score(text),
+            'job_roles': DynamicResumeAnalyzer.suggest_job_roles(text)
+        }
+        
+        return analysis
+    
+    @staticmethod
+    def extract_skills_unique(text: str) -> list:
+        """Find skills that are ACTUALLY in this resume"""
+        skills_found = []
+        text_lower = text.lower()
+        
+        # Comprehensive tech skills database
+        tech_keywords = [
+            # Programming Languages
+            'python', 'java', 'javascript', 'typescript', 'c++', 'c#', 'php', 'ruby', 'go', 'rust', 'swift', 'kotlin', 'scala', 'perl', 'r', 'matlab',
+            # Web Technologies
+            'html', 'css', 'react', 'angular', 'vue', 'node.js', 'express', 'django', 'flask', 'spring', 'nestjs', 'laravel', 'rails', 'next.js', 'gatsby',
+            # Databases
+            'mysql', 'mongodb', 'postgresql', 'redis', 'sqlite', 'oracle', 'elasticsearch', 'cassandra', 'dynamodb', 'firebase',
+            # Cloud & DevOps
+            'aws', 'azure', 'gcp', 'docker', 'kubernetes', 'terraform', 'jenkins', 'git', 'github', 'gitlab', 'ci/cd', 'ansible', 'puppet',
+            # Data Science & AI
+            'pandas', 'numpy', 'tensorflow', 'pytorch', 'scikit-learn', 'machine learning', 'deep learning', 'nlp', 'opencv', 'spark', 'hadoop',
+            # Mobile
+            'android', 'ios', 'react native', 'flutter', 'xamarin', 'cordova',
+            # Testing
+            'jest', 'mocha', 'pytest', 'selenium', 'cypress', 'junit', 'testng',
+            # Other Tools
+            'jira', 'confluence', 'linux', 'bash', 'shell', 'excel', 'powerpoint', 'word', 'figma', 'sketch', 'postman', 'swagger'
+        ]
+        
+        for skill in tech_keywords:
+            if re.search(r'\b' + re.escape(skill) + r'\b', text_lower):
+                skills_found.append(skill.title())
+        
+        # Look for skills in ALL CAPS (like SQL, HTML, CSS)
+        caps_matches = re.findall(r'\b[A-Z]{2,}\b', text)
+        for match in caps_matches:
+            if len(match) > 2 and match.lower() in [s.lower() for s in tech_keywords]:
+                skills_found.append(match)
+        
+        return list(set(skills_found))
+    
+    @staticmethod
+    def calculate_dynamic_score(text: str) -> int:
+        """Calculate unique score based on actual content"""
+        score = 0
+        text_lower = text.lower()
+        
+        # Skills variety (max 25 points)
+        skills = DynamicResumeAnalyzer.extract_skills_unique(text)
+        skill_score = min(len(skills) * 2, 25)
+        score += skill_score
+        
+        # Experience depth (max 25 points)
+        exp_patterns = [
+            r'(\d+)[\+]?\s*(years?|yrs?)\s+experience',
+            r'(\d+)\s*\+?\s*years'
+        ]
+        exp_found = False
+        for pattern in exp_patterns:
+            match = re.search(pattern, text_lower)
+            if match:
+                years = int(match.group(1))
+                exp_score = min(years * 3, 25)
+                score += exp_score
+                exp_found = True
+                break
+        if not exp_found:
+            score += 5  # Basic points for having experience section
+        
+        # Projects quality (max 25 points)
+        project_keywords = ['project', 'developed', 'built', 'created', 'implemented', 'designed']
+        project_count = sum(text_lower.count(keyword) for keyword in project_keywords)
+        project_score = min(project_count * 3, 25)
+        score += project_score
+        
+        # Resume structure (max 25 points)
+        structure_elements = ['education', 'experience', 'skills', 'contact', 'email', 'phone']
+        structure_count = sum(1 for element in structure_elements if element in text_lower)
+        structure_score = min(structure_count * 5, 25)
+        score += structure_score
+        
+        return min(score, 100)
+    
+    @staticmethod
+    def suggest_job_roles(text: str) -> list:
+        """Suggest job roles based on ACTUAL skills in resume"""
+        skills = DynamicResumeAnalyzer.extract_skills_unique(text)
+        text_lower = text.lower()
+        job_roles = []
+        
+        # Map skills to job roles with detailed descriptions
+        if any(skill in ['Python', 'Django', 'Flask', 'Pandas', 'Numpy', 'Tensorflow', 'Pytorch'] for skill in skills):
+            if 'machine learning' in text_lower or 'tensorflow' in skills or 'pytorch' in skills:
+                job_roles.append({
+                    "title": "Machine Learning Engineer",
+                    "description": f"Design and implement ML models using {', '.join([s for s in skills if s in ['Python', 'Tensorflow', 'Pytorch', 'Pandas', 'Numpy', 'Scikit-learn']][:3])}",
+                    "responsibilities": [
+                        "Develop machine learning models and algorithms",
+                        "Process and analyze large datasets",
+                        "Collaborate with data science team",
+                        "Optimize model performance"
+                    ],
+                    "salary_range": "₹8-15 LPA",
+                    "experience_level": "Mid-Senior Level"
+                })
+            job_roles.append({
+                "title": "Python Developer", 
+                "description": f"Build applications using {', '.join([s for s in skills if s in ['Python', 'Django', 'Flask', 'FastAPI']][:2])}",
+                "responsibilities": [
+                    "Develop backend applications",
+                    "Write clean and efficient Python code",
+                    "Integrate databases and APIs",
+                    "Test and debug applications"
+                ],
+                "salary_range": "₹6-12 LPA",
+                "experience_level": "Mid Level"
+            })
+        
+        if any(skill in ['React', 'Angular', 'Vue', 'Javascript', 'Typescript'] for skill in skills):
+            if 'node.js' in skills:
+                job_roles.append({
+                    "title": "Full Stack Developer",
+                    "description": f"End-to-end development using {', '.join([s for s in skills if s in ['React', 'Node.js', 'Javascript', 'Typescript', 'MongoDB']][:3])}",
+                    "responsibilities": [
+                        "Develop both frontend and backend",
+                        "Design responsive user interfaces",
+                        "Build RESTful APIs",
+                        "Database design and management"
+                    ],
+                    "salary_range": "₹8-18 LPA",
+                    "experience_level": "Mid-Senior Level"
+                })
+            else:
+                job_roles.append({
+                    "title": "Frontend Developer",
+                    "description": f"Create user interfaces with {', '.join([s for s in skills if s in ['React', 'Angular', 'Vue', 'Javascript', 'Typescript']][:2])}",
+                    "responsibilities": [
+                        "Build responsive web applications",
+                        "Implement pixel-perfect designs",
+                        "Optimize application performance",
+                        "Collaborate with UX team"
+                    ],
+                    "salary_range": "₹5-12 LPA",
+                    "experience_level": "Entry-Mid Level"
+                })
+        
+        if any(skill in ['AWS', 'Docker', 'Kubernetes', 'Terraform', 'Azure', 'GCP'] for skill in skills):
+            job_roles.append({
+                "title": "DevOps Engineer",
+                "description": f"Manage cloud infrastructure using {', '.join([s for s in skills if s in ['AWS', 'Docker', 'Kubernetes', 'Terraform']][:2])}",
+                "responsibilities": [
+                    "Deploy and manage applications",
+                    "Set up CI/CD pipelines",
+                    "Monitor system performance",
+                    "Ensure security and scalability"
+                ],
+                "salary_range": "₹10-20 LPA",
+                "experience_level": "Mid-Senior Level"
+            })
+        
+        if any(skill in ['Android', 'Flutter', 'React Native', 'Swift', 'Kotlin'] for skill in skills):
+            job_roles.append({
+                "title": "Mobile App Developer",
+                "description": f"Develop mobile applications using {', '.join([s for s in skills if s in ['Android', 'Flutter', 'React Native']][:2])}",
+                "responsibilities": [
+                    "Design and build mobile apps",
+                    "Ensure app performance and quality",
+                    "Integrate APIs and backend services",
+                    "Publish and maintain apps"
+                ],
+                "salary_range": "₹6-15 LPA",
+                "experience_level": "Mid Level"
+            })
+        
+        if any(skill in ['MySQL', 'PostgreSQL', 'MongoDB', 'Redis', 'Oracle'] for skill in skills):
+            if len(skills) > 5:  # Has database + other skills
+                job_roles.append({
+                    "title": "Backend Developer",
+                    "description": f"Build server-side applications with {', '.join([s for s in skills if s in ['Node.js', 'Python', 'Java', 'MySQL', 'PostgreSQL', 'MongoDB']][:3])}",
+                    "responsibilities": [
+                        "Develop server-side logic",
+                        "Design and manage databases",
+                        "Build and consume APIs",
+                        "Ensure application security"
+                    ],
+                    "salary_range": "₹7-14 LPA",
+                    "experience_level": "Mid Level"
+                })
+        
+        # Entry level detection
+        if 'fresher' in text_lower or 'intern' in text_lower or 'entry level' in text_lower:
+            job_roles = [
+                {
+                    "title": f"Junior {role['title']}" if isinstance(role, dict) else f"Junior {role}",
+                    "description": f"Entry-level position for beginners",
+                    "responsibilities": ["Learn and assist senior developers", "Basic coding tasks", "Testing and debugging"],
+                    "salary_range": "₹3-6 LPA",
+                    "experience_level": "Entry Level"
+                } for role in job_roles[:2]
+            ]
+        
+        return job_roles[:3] if job_roles else [{
+            "title": "General Software Developer",
+            "description": "Software development role based on your skills",
+            "responsibilities": ["Develop software applications", "Code testing and debugging", "Collaborate with team"],
+            "salary_range": "₹4-8 LPA",
+            "experience_level": "Entry Level"
+        }]
+    
+    @staticmethod
+    def generate_suggestions(text: str) -> list:
+        """Generate UNIQUE suggestions for THIS resume"""
+        suggestions = []
+        text_lower = text.lower()
+        skills = DynamicResumeAnalyzer.extract_skills_unique(text)
+        
+        # Score-based suggestions
+        score = DynamicResumeAnalyzer.calculate_dynamic_score(text)
+        if score < 40:
+            suggestions.append("🔴 Your resume needs major improvements. Add more skills, experience details, and projects.")
+        elif score < 60:
+            suggestions.append("🟡 Good start! Add specific achievements and quantify your results.")
+        elif score < 80:
+            suggestions.append("🟢 Strong resume! Highlight leadership experience and advanced skills.")
+        
+        # Skills quantity suggestions
+        if len(skills) < 3:
+            suggestions.append("📚 List at least 5-7 technical skills relevant to your target role.")
+        elif len(skills) < 8:
+            suggestions.append("💪 Good skills! Add 2-3 more advanced or specialized technologies.")
+        elif len(skills) < 15:
+            suggestions.append("🚀 Excellent skills variety! Consider adding cloud or DevOps technologies.")
+        
+        # Experience section analysis
+        if not re.search(r'\bexperience\b|\bwork\b|\bjob\b|\bcareer\b', text_lower):
+            suggestions.append("💼 Add detailed work experience section with specific roles and achievements.")
+        else:
+            # Check if experience has metrics
+            if not re.search(r'\d+%|\d+years|\$\d+|\d+x|\d+million|\d+thousand', text_lower):
+                suggestions.append("📊 Quantify your achievements with numbers (e.g., 'Improved performance by 30%').")
+        
+        # Projects section analysis
+        if not re.search(r'\bproject\b|\bportfolio\b|\bbuilt\b|\bdeveloped\b|\bcreated\b', text_lower):
+            suggestions.append("🚀 Include 2-3 specific projects with technologies used and outcomes.")
+        else:
+            # Check if projects have details
+            if not re.search(r'\bgithub\b|\bgitlab\b|\blive\b|\bdeploy\b|\bproduction\b', text_lower):
+                suggestions.append("🔗 Add project links (GitHub) and mention live deployments if available.")
+        
+        # Education details
+        if not re.search(r'\beducation\b|\bdegree\b|\buniversity\b|\bcollege\b', text_lower):
+            suggestions.append("🎓 Add education details with degree, institution, and graduation year.")
+        
+        # Contact information
+        if not re.search(r'\bemail\b|\bphone\b|\bcontact\b|\blinkedin\b', text_lower):
+            suggestions.append("📞 Add complete contact information including LinkedIn profile.")
+        
+        # Technical skills gaps based on current skills
+        if any(skill in ['Python', 'Java', 'Javascript'] for skill in skills):
+            if not any(skill in ['AWS', 'Azure', 'GCP'] for skill in skills):
+                suggestions.append("☁️ Add cloud platform skills (AWS/Azure/GCP) for better job opportunities.")
+        
+        if any(skill in ['React', 'Angular', 'Vue'] for skill in skills):
+            if not any(skill in ['Node.js', 'Express', 'Django', 'Flask'] for skill in skills):
+                suggestions.append("🔧 Consider adding backend skills (Node.js/Django) for full-stack opportunities.")
+        
+        if len(skills) > 5 and not any(skill in ['Docker', 'Kubernetes', 'Jenkins'] for skill in skills):
+            suggestions.append("🐳 Add DevOps skills (Docker/Kubernetes) to increase your market value.")
+        
+        # Soft skills indicators
+        if not re.search(r'\blead\b|\bteam\b|\bmanage\b|\bcommunicat\b|\bpresent\b', text_lower):
+            suggestions.append("👥 Highlight leadership, teamwork, and communication experiences.")
+        
+        # Certifications and achievements
+        if not re.search(r'\bcertifi\b|\baward\b|\bachieve\b|\brecognition\b', text_lower):
+            suggestions.append("🏆 Add certifications, awards, or notable achievements to stand out.")
+        
+        # Resume formatting and structure
+        if len(text) < 500:
+            suggestions.append("📝 Your resume seems too short. Add more details about your experience and projects.")
+        elif len(text) > 3000:
+            suggestions.append("✂️ Consider condensing your resume to 1-2 pages for better readability.")
+        
+        # Action verbs
+        if not re.search(r'\b(developed|implemented|led|created|built|designed|managed|achieved|improved|optimized)\b', text_lower):
+            suggestions.append("⚡ Use strong action verbs like 'Developed', 'Implemented', 'Led' instead of passive language.")
+        
+        return suggestions[:8]  # Return top 8 most relevant suggestions
+    
+    @staticmethod
+    def extract_experience_info(text: str) -> str:
+        """Extract experience information"""
+        patterns = [
+            r'(\d+)[\+]?\s*(years?|yrs?)\s+experience',
+            r'experience\s+of\s+(\d+)\s*(years?|yrs?)',
+            r'(\d+)\s*(years?|yrs?)\s+in\s+',
+            r'(\d+)[\+]?\s*(years?|yrs?)\s+of\s+experience',
+            r'(\d+)\s*\+?\s*years',
+            r'(\d+)\s*-\s*(\d+)\s*years',
+            r'over\s+(\d+)\s*years'
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                years = match.group(1)
+                return f"{years} years of experience"
+        
+        # Check for entry-level/fresher keywords
+        if re.search(r'\bfresher\b|\bentry\s*level\b|\bintern\b|\btrainee\b', text, re.IGNORECASE):
+            return "Entry-level/Fresher"
+        
+        return "Experience not specified"
+    
+    @staticmethod
+    def extract_education_info(text: str) -> list:
+        """Extract education information"""
+        education_patterns = [
+            r'(bachelor|master|phd|b\.tech|m\.tech|b\.sc|m\.sc|b\.a|m\.a|b\.e|m\.e)',
+            r'(university|college|institute)',
+            r'(computer science|information technology|engineering|science|arts|commerce)'
+        ]
+        
+        education_found = []
+        for pattern in education_patterns:
+            matches = re.findall(pattern, text, re.IGNORECASE)
+            education_found.extend(matches)
+        
+        return list(set(education_found))
+    
+    @staticmethod
+    def extract_projects_info(text: str) -> list:
+        """Extract project information"""
+        project_keywords = ['project', 'developed', 'built', 'created', 'implemented', 'designed']
+        projects = []
+        
+        for keyword in project_keywords:
+            matches = re.findall(rf'{keyword}[^.]*', text, re.IGNORECASE)
+            projects.extend(matches[:2])  # Limit to avoid too much text
+        
+        return projects[:3]  # Return top 3 project mentions
+    
+    @staticmethod
+    def identify_strengths(text: str) -> list:
+        """Identify strengths from the resume"""
+        strengths = []
+        skills = DynamicResumeAnalyzer.extract_skills_unique(text)
+        
+        if len(skills) > 8:
+            strengths.append("Strong technical skill diversity")
+        
+        if re.search(r'\blead\b|\bteam\b|\bmanage\b', text, re.IGNORECASE):
+            strengths.append("Leadership and teamwork experience")
+        
+        if re.search(r'\bproject\b.*\bdeploy\b|\blive\b|\bproduction\b', text, re.IGNORECASE):
+            strengths.append("Real-world project deployment experience")
+        
+        if len(DynamicResumeAnalyzer.extract_projects_info(text)) > 2:
+            strengths.append("Multiple project experience")
+        
+        return strengths
+    
+    @staticmethod
+    def identify_weaknesses(text: str) -> list:
+        """Identify weaknesses or gaps"""
+        weaknesses = []
+        skills = DynamicResumeAnalyzer.extract_skills_unique(text)
+        
+        if len(skills) < 3:
+            weaknesses.append("Limited technical skills mentioned")
+        
+        if not re.search(r'\bexperience\b|\bwork\b|\bjob\b', text, re.IGNORECASE):
+            weaknesses.append("No work experience section")
+        
+        if not re.search(r'\beducation\b|\bdegree\b', text, re.IGNORECASE):
+            weaknesses.append("Education details missing")
+        
+        if not re.search(r'\bemail\b|\bphone\b|\bcontact\b', text, re.IGNORECASE):
+            weaknesses.append("Contact information incomplete")
+        
+        return weaknesses
+    
+    @staticmethod
+    def find_unique_factors(text: str) -> list:
+        """Find unique factors in this resume"""
+        unique = []
+        text_lower = text.lower()
+        
+        # Check for unique combinations
+        skills = DynamicResumeAnalyzer.extract_skills_unique(text)
+        
+        if any(skill in ['tensorflow', 'pytorch', 'machine learning'] for skill in skills):
+            unique.append("AI/ML expertise")
+        
+        if any(skill in ['aws', 'azure', 'gcp'] for skill in skills) and len(skills) > 5:
+            unique.append("Cloud architecture skills")
+        
+        if re.search(r'\bopen\s*source\b|\bcontribut\b', text_lower):
+            unique.append("Open source contributions")
+        
+        if re.search(r'\bpublished\b|\bresearch\b|\bpaper\b', text_lower):
+            unique.append("Research or publications")
+        
+        return unique
+```
+
+### 2. routers/auto_analyzer.py (NEW FILE)
+```python
+from fastapi import APIRouter, HTTPException
+from services.chat_bot_service import ChatBotService
+
+router = APIRouter()
+
+@router.post("/auto-analyze")
+async def auto_analyze_resume(resume_text: str = None):
+    """Automatically analyze resume without user prompt"""
+    try:
+        if not resume_text:
+            raise HTTPException(status_code=400, detail="Resume text is required")
+        
+        # Trigger automatic analysis
+        chat_bot_service = ChatBotService()
+        response = await chat_bot_service.chat_conversation(
+            "Please analyze this resume and provide comprehensive feedback",
+            resume_text
+        )
+        
+        return {"success": True, "analysis": response}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/smart-analyze")
+async def smart_analyze_resume(resume_content: dict):
+    """Smart resume analysis with predefined questions"""
+    try:
+        if not resume_content or "text" not in resume_content:
+            raise HTTPException(status_code=400, detail="Resume content is required")
+        
+        chat_bot_service = ChatBotService()
+        
+        # Auto-generate comprehensive analysis
+        questions = [
+            "What is the overall score of this resume?",
+            "What skills are identified in this resume?",
+            "What job roles would suit this candidate?",
+            "What are the key strengths and weaknesses?",
+            "What improvements would you recommend?"
+        ]
+        
+        analysis_results = {}
+        for question in questions:
+            response = await chat_bot_service.chat_conversation(question, resume_content["text"])
+            analysis_results[question] = response
+        
+        return {"success": True, "analysis": analysis_results}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+### 3. routers/simple_analyzer.py (NEW FILE)
+```python
+from fastapi import APIRouter, HTTPException, File, UploadFile, Form
+from services.resume_analyzer import DynamicResumeAnalyzer
+import json
+
+router = APIRouter()
+
+@router.post("/simple-analyze")
+async def simple_analyze_resume(text: str = Form(...)):
+    """Simple resume analysis without external APIs"""
+    try:
+        if not text:
+            raise HTTPException(status_code=400, detail="Resume text is required")
+        
+        # Use our dynamic analyzer
+        analysis = DynamicResumeAnalyzer.analyze_resume_completely(text, "uploaded_resume")
+        
+        return {
+            "success": True,
+            "score": analysis["score"],
+            "skills": analysis["skills"],
+            "suggestions": analysis["suggestions"],
+            "job_roles": analysis["job_roles"],
+            "experience": analysis["experience"],
+            "education": analysis["education"],
+            "projects": analysis["projects"],
+            "strengths": analysis["strengths"],
+            "weaknesses": analysis["weaknesses"],
+            "unique_factors": analysis["unique_factors"]
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/upload-and-analyze")
+async def upload_and_analyze(file: UploadFile = File(...)):
+    """Upload and analyze resume file"""
+    try:
+        if not file:
+            raise HTTPException(status_code=400, detail="No file uploaded")
+        
+        # Read file content
+        content = await file.read()
+        text = content.decode('utf-8')
+        
+        if not text.strip():
+            raise HTTPException(status_code=400, detail="File is empty")
+        
+        # Analyze with our dynamic analyzer
+        analysis = DynamicResumeAnalyzer.analyze_resume_completely(text, file.filename)
+        
+        return {
+            "success": True,
+            "filename": file.filename,
+            "score": analysis["score"],
+            "skills": analysis["skills"],
+            "suggestions": analysis["suggestions"],
+            "job_roles": analysis["job_roles"],
+            "experience": analysis["experience"],
+            "education": analysis["education"],
+            "projects": analysis["projects"],
+            "strengths": analysis["strengths"],
+            "weaknesses": analysis["weaknesses"],
+            "unique_factors": analysis["unique_factors"]
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+```
+
+## 📝 MODIFIED FILES
+
+### 4. app.py (MODIFIED)
+```python
+# Added these imports:
+from routers.auto_analyzer import router as auto_analyzer_router
+from routers.simple_analyzer import router as simple_analyzer_router
+
+# Added these router registrations:
+app.include_router(auto_analyzer_router, prefix="/auto-analyzer", tags=["auto-analyzer"])
+app.include_router(simple_analyzer_router, prefix="/simple-analyzer", tags=["simple-analyzer"])
+
+# Added these exempt routes:
+"/files/fileUpload",
+"/simple-analyzer/upload-and-analyze", 
+"/simple-analyzer/simple-analyze"
+```
+
+### 5. services/chat_bot_files_service.py (MODIFIED)
+```python
+# Added import:
+from services.resume_analyzer import DynamicResumeAnalyzer
+
+# Added new function:
+def _analyze_resume_immediately(filename: str, text: str):
+    """Enhanced resume analysis using DynamicResumeAnalyzer"""
+    try:
+        analysis = DynamicResumeAnalyzer.analyze_resume_completely(text, filename)
+        return {
+            "success": True,
+            "score": analysis["score"],
+            "skills": analysis["skills"],
+            "suggestions": analysis["suggestions"],
+            "job_roles": analysis["job_roles"],
+            "experience": analysis["experience"],
+            "education": analysis["education"],
+            "projects": analysis["projects"],
+            "strengths": analysis["strengths"],
+            "weaknesses": analysis["weaknesses"],
+            "unique_factors": analysis["unique_factors"]
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+# Modified upload_files method to include auto-analysis
+```
+
+### 6. services/chat_bot_service.py (MODIFIED)
+```python
+# Enhanced chat_conversation method to include auto-detection for resume analysis
+async def chat_conversation(self, question: str, resume_text: str = None):
+    """Enhanced chat conversation with auto-resume analysis detection"""
+    
+    # Auto-detect if this is a resume analysis request
+    resume_keywords = ['resume', 'cv', 'analyze', 'skills', 'experience', 'job role']
+    is_resume_request = any(keyword in question.lower() for keyword in resume_keywords)
+    
+    if is_resume_request and resume_text:
+        # Use enhanced analysis
+        from services.resume_analyzer import DynamicResumeAnalyzer
+        analysis = DynamicResumeAnalyzer.analyze_resume_completely(resume_text, "chat_resume")
+        return f"Resume Analysis Complete: Score {analysis['score']}%, Skills: {', '.join(analysis['skills'][:5])}"
+    
+    # Continue with normal chat logic...
+```
+
+### 7. services/pinecone_service.py (MODIFIED)
+```python
+# Enhanced chain_resp method with dynamic resume analysis prompt
+def chain_resp(self, question: str, user_id: str):
+    """Enhanced chain response with truly dynamic resume analysis"""
+    
+    # Dynamic resume analysis template (no generic templates)
+    if any(keyword in question.lower() for keyword in ['resume', 'cv', 'analyze']):
+        dynamic_prompt = f"""
+        Analyze this resume content and provide unique, specific feedback:
+        
+        Resume Content: {question[:2000]}
+        
+        Requirements:
+        1. Calculate a unique score (0-100) based on actual content
+        2. Extract skills actually present in the text
+        3. Provide specific, actionable suggestions
+        4. Suggest job roles based on identified skills
+        5. Highlight unique strengths and weaknesses
+        
+        Do NOT use generic templates. Provide analysis specific to this resume.
+        """
+        # Use dynamic prompt for analysis...
+```
+
+### 8. frontend/src/pages/default/components/ChatPage/ChatPage.jsx (MAJOR MODIFICATIONS)
+```javascript
+// Key changes made:
+
+// 1. Updated component name from HireLense to ResumeXpert
+<h1 className="main-title">
+  <i className="fas fa-binoculars"></i> ResumeXpert – AI Driven Resume Analyzer
+</h1>
+
+// 2. Enhanced state management for systematic display
+const [jobRoles, setJobRoles] = useState([]);
+const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+// 3. Updated handleFileUpload to use simple-analyzer endpoint
+const handleFileUpload = async (event) => {
+  // Clear previous data immediately
+  setUploadedFile(null);
+  setFileUrl(null);
+  setScore(0);
+  setSkills([]);
+  setSuggestions([]);
+  setJobRoles([]);
+  setIsAnalyzing(true);
+  
+  // Upload and analyze with new endpoint
+  const formData = new FormData();
+  formData.append('files', file);
+  
+  const response = await axios.post('http://localhost:8000/simple-analyzer/upload-and-analyze', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+  
+  // Update state with real results
+  setScore(result.score);
+  setSkills(result.skills);
+  setSuggestions(result.suggestions);
+  setJobRoles(result.job_roles || []);
+};
+
+// 4. Enhanced handleGetTips with systematic format
+const handleGetTips = () => {
+  // Generate personalized tips with priority, impact, timeframe
+  const personalizedTips = [];
+  const tipPriority = [];
+  const tipImpact = [];
+  const tipTimeframe = [];
+  
+  // Score-based tips
+  if (score < 50) {
+    personalizedTips.push("🔴 Your resume needs major improvements...");
+    tipPriority.push("CRITICAL");
+    tipImpact.push("Could improve score by 20-30 points");
+    tipTimeframe.push("Immediate action required");
+  }
+  // ... more systematic tip generation
+};
+
+// 5. Enhanced handleSkillsAdvice with systematic format
+const handleSkillsAdvice = () => {
+  // Generate systematic skills recommendations
+  const skillsToAdd = [];
+  const skillsReasons = [];
+  const skillsImpact = [];
+  const skillsPriority = [];
+  
+  // Check for missing programming languages, web tech, cloud, etc.
+  // ... systematic skills analysis
+};
+
+// 6. Removed job role button but kept handleJobRole function
+// 7. Updated dashboard to show systematic card format
+// 8. Removed tips from dashboard (only show on button click)
+
+// Dashboard sections:
+// - Overall Score (circular progress)
+// - Technical Skills Analysis (systematic cards)
+// - Recommended Job Roles (systematic cards)
+// - Tips removed from dashboard (button-only)
+```
+
+### 9. frontend/src/pages/default/components/ChatPage/ChatPage.scss (MAJOR MODIFICATIONS)
+```scss
+// Added comprehensive styling for systematic card layouts:
+
+// Skills Cards Section
+.skills-section {
+  .skills-cards-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .skill-card {
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+    border: 1px solid #e1e8ed;
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #74b9ff;
+    }
+    
+    .level-badge {
+      &.level-advanced { background: linear-gradient(135deg, #e17055, #d63031); }
+      &.level-intermediate { background: linear-gradient(135deg, #fdcb6e, #f39c12); }
+      &.level-foundation { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+    }
+  }
+}
+
+// Tips Cards Section
+.suggestions-section {
+  .tips-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .tip-card {
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+    border: 1px solid #e1e8ed;
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    
+    .priority-badge {
+      &.priority-critical { background: linear-gradient(135deg, #d63031, #e17055); }
+      &.priority-high { background: linear-gradient(135deg, #fdcb6e, #f39c12); }
+      &.priority-medium { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+      &.priority-low { background: linear-gradient(135deg, #b2bec3, #636e72); }
+    }
+  }
+}
+
+// Job Roles Section (enhanced)
+.job-roles-section {
+  .job-role-card {
+    background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+    border: 1px solid #e1e8ed;
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #74b9ff;
+    }
+    
+    .salary-badge {
+      background: linear-gradient(135deg, #00b894, #00a085);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+    }
+  }
+}
+```
+
+### 10. routers/chat_bot.py (MODIFIED)
+```python
+# Removed authentication dependency from /chat endpoint
+@router.post("/chat")
+# dependencies=[Depends(get_current_token)]  # Commented out for public access
+async def chat_conversation(request: ChatRequest):
+    """Chat conversation endpoint (now public for testing)"""
+```
+
+## 📊 SUMMARY OF ALL CHANGES
+
+### 🆕 NEW FILES (3):
+1. `services/resume_analyzer.py` - Core analysis engine
+2. `routers/auto_analyzer.py` - Auto-analysis endpoints  
+3. `routers/simple_analyzer.py` - Main API endpoints
+
+### 📝 MODIFIED FILES (7):
+1. `app.py` - Added router imports and registrations
+2. `services/chat_bot_files_service.py` - Integrated dynamic analyzer
+3. `services/chat_bot_service.py` - Added auto-detection
+4. `services/pinecone_service.py` - Enhanced prompts
+5. `ChatPage.jsx` - Complete UI overhaul with systematic display
+6. `ChatPage.scss` - Professional card styling
+7. `routers/chat_bot.py` - Made endpoint public
+
+### 🎯 KEY FEATURES ADDED:
+- ✅ Dynamic resume analysis (no templates)
+- ✅ Systematic card-based display
+- ✅ Personalized tips and skills advice
+- ✅ Auto-refresh on new upload
+- ✅ Professional UI with hover effects
+- ✅ ResumeXpert branding
+- ✅ Button-only tip display
+
+### 🚀 FUNCTIONALITY:
+- Resume upload → Automatic analysis → Systematic dashboard display
+- Get Tips button → Detailed systematic tips in chat
+- Skills Advice button → Detailed skills recommendations in chat
+- Job roles displayed automatically in systematic cards
+- Clean state management for new uploads

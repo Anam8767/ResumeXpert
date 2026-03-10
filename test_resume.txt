@@ -1,0 +1,32 @@
+John Doe
+Software Developer with 3 years of experience in web development.
+
+Experience:
+- Senior Frontend Developer at Tech Company (2021-2024)
+- Developed React applications with TypeScript
+- Built RESTful APIs using Node.js and Express
+- Worked with MongoDB and PostgreSQL databases
+- Implemented CI/CD pipelines using Docker and Jenkins
+
+Skills:
+- JavaScript, TypeScript, React, Angular, Vue.js
+- Node.js, Express, Python, Django
+- HTML, CSS, SASS, Tailwind CSS
+- MySQL, PostgreSQL, MongoDB, Redis
+- AWS, Docker, Kubernetes, Git
+- Agile, Scrum, JIRA
+
+Education:
+- Bachelor of Technology in Computer Science
+- Graduated 2020 with 8.5 GPA
+
+Projects:
+- E-commerce platform using React and Node.js
+- Real-time chat application with WebSocket
+- Data visualization dashboard with D3.js
+
+Contact:
+- Email: john.doe@email.com
+- Phone: +91-9876543210
+- LinkedIn: linkedin.com/in/johndoe
+- GitHub: github.com/johndoe

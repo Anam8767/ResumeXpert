@@ -1,0 +1,6 @@
+@echo off
+echo Starting HireLens Backend Server...
+cd /d "d:\Windsurf\Hire lens FYP\hire_lens-dev"
+echo Starting Python backend on port 8000...
+python -m uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+pause

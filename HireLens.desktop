@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=HireLens Auto-Start
+Comment=Start HireLens Backend and Frontend
+Exec=powershell -ExecutionPolicy Bypass -File "d:\Windsurf\Hire lens FYP\hire_lens-dev\AUTO_START.ps1"
+Icon=terminal
+Terminal=true
+Type=Application
+Categories=Development;
