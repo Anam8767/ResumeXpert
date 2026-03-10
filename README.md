@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## 🚀 Server Starter Steps
 
 Follow the steps below to set up and start your FastAPI server properly:
@@ -122,3 +123,6 @@ python3 --version
  
 
  
+=======
+# ResumeXpert
+>>>>>>> ec0cafcb10835b4d11750c3607f480f8f0f5a74c
